@@ -4,8 +4,9 @@ const PORT = process.env.PORT || 3001;
 const cors = require('cors');
 
 app.use(cors());
-
 app.use(express.json());
+app.use(express.static('build'));
+
 
 // temporary dummy data (names from random name generator)
 let people = [
