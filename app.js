@@ -1,7 +1,7 @@
 const express = require('express');
 const app = express();
-const port = 3001;
-const cors = require('cors')
+const PORT = process.env.PORT || 3001;
+const cors = require('cors');
 
 app.use(cors());
 
@@ -89,4 +89,4 @@ const unknownEndpoint = (req, res) => {
 
 app.use(unknownEndpoint);
 
-app.listen(port, () => console.log(`family tree app listening on port ${port}`));
+app.listen(PORT, () => console.log(`family tree app listening on port ${port}`));
