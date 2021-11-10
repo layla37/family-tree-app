@@ -89,4 +89,4 @@ const unknownEndpoint = (req, res) => {
 
 app.use(unknownEndpoint);
 
-app.listen(PORT, () => console.log(`family tree app listening on port ${port}`));
+app.listen(PORT, () => console.log(`family tree app listening on port ${PORT}`));
