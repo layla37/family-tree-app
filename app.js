@@ -1,65 +1,40 @@
+require('dotenv').config();
 const express = require('express');
 const app = express();
+const mongoose = require('mongoose');
 const PORT = process.env.PORT || 3001;
 const cors = require('cors');
+const Person = require('./models/person');
+const url = process.env.MONGODB_URI;
+
+console.log('connecting to', url);
+
+mongoose.connect(url)
+  .then(result => {
+    console.log('connected to MongoDB');
+  })
+  .catch((error) => {
+    console.log('error connecting to MongoDB:', error.message);
+  });
 
 app.use(cors());
 app.use(express.json());
 app.use(express.static('build'));
-
-
-// temporary dummy data (names from random name generator)
-let people = [
-  {
-    name: 'Danielle Jones',
-    id: 1,
-    parents: ['Megan Brown', 'David Quinn'],
-    partner: 'Christopher Guzman',
-    children: ['Stephanie Taylor'],
-    bio: 'TBD lolz'
-  },
-  {
-    name: 'Christopher Guzman',
-    id: 2,
-    parents: ['Michael Dotson', 'Eryn Medina'],
-    partner: 'Danielle Jones',
-    children: ['Stephanie Taylor'],
-    bio: 'blah blah'
-  },
-  {
-    name: 'Stephanie Taylor',
-    id: 3,
-    parents: ['Danielle Jones', 'Christopher Guzman'],
-    partner: null,
-    children: null,
-    bio: 'coolest person ever'
-  }
-];
-
-const generateId = () => {
-  const maxId = people.length > 0 
-  ? Math.max(...people.map(p => p.id))
-  : 0;
-  return maxId + 1;
-};
 
 app.get('/', (req, res) => {
 	res.send('Hello, welcome!');
 });
 
 app.get('/api/people', (req, res) => {
-  res.json(people);
+  Person.find({}).then(people => {
+    res.json(people);
+  });
 });
 
 app.get('/api/people/:id', (req, res) => {
-  const id = Number(req.params.id);
-  const person = people.find(p => p.id === id);
-
-  if (person) {
+  Person.findById(req.params.id).then(person => {
     res.json(person);
-  } else {
-    res.status(404).end();
-  }
+  });
 });
 
 app.post('/api/people', (req, res) => {
@@ -71,17 +46,17 @@ app.post('/api/people', (req, res) => {
     });
   }
 
-  const person = {
+  const person = new Person({
     name: body.name,
-    id: generateId(),
     parents: body.parents || null,
     partner: body.partner || null,
     children: body.children || null,
     bio: body.bio || null
-  };
+  });
 
-  people = people.concat(person);
-  res.json(person);
+  person.save().then(savedPerson => {
+    res.json(savedPerson);
+  });
 });
 
 const unknownEndpoint = (req, res) => {
