@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 const personSchema = new mongoose.Schema({
   name: String,
-  parents: [String],
+  parents: [mongoose.ObjectId],
   partner: String,
   children: [String],
   bio: String

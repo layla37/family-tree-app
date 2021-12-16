@@ -59,6 +59,14 @@ app.post('/api/people', (req, res) => {
   });
 });
 
+app.delete('/api/people/:id', (request, response, next) => {
+  Person.findByIdAndRemove(request.params.id)
+    .then(result => {
+      response.status(204).end()
+    })
+    .catch(error => next(error))
+})
+
 const unknownEndpoint = (req, res) => {
   res.status(404).send({error: 'unknown endpoint'});
 };
