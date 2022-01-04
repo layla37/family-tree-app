@@ -3,8 +3,8 @@ const mongoose = require('mongoose');
 const personSchema = new mongoose.Schema({
   name: String,
   parents: [mongoose.ObjectId],
-  partner: String,
-  children: [String],
+  partners: [mongoose.ObjectId],
+  children: [mongoose.ObjectId],
   bio: String
 });
 
