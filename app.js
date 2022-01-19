@@ -48,10 +48,11 @@ app.post('/api/people', (req, res) => {
 
   const person = new Person({
     name: body.name,
-    parents: body.parents || null,
-    partner: body.partner || null,
-    children: body.children || null,
-    bio: body.bio || null
+    parents: body.parents || [],
+    partners: body.partner || [],
+    children: body.children || [],
+    bio: body.bio || '',
+    url: body.url || ''
   });
 
   person.save().then(savedPerson => {
@@ -65,6 +66,10 @@ app.delete('/api/people/:id', (request, response, next) => {
       response.status(204).end()
     })
     .catch(error => next(error))
+});
+
+app.put('/api/people/:id', function (req, res) {
+  res.send('Got a PUT request at /user')
 })
 
 const unknownEndpoint = (req, res) => {

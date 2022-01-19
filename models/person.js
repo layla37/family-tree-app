@@ -5,7 +5,8 @@ const personSchema = new mongoose.Schema({
   parents: [mongoose.ObjectId],
   partners: [mongoose.ObjectId],
   children: [mongoose.ObjectId],
-  bio: String
+  bio: String,
+  url: String
 });
 
 personSchema.set('toJSON', {
