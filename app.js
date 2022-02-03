@@ -49,7 +49,7 @@ app.post('/api/people', (req, res) => {
   const person = new Person({
     name: body.name,
     parents: body.parents || [],
-    partners: body.partner || [],
+    partners: body.partners || [],
     children: body.children || [],
     bio: body.bio || '',
     url: body.url || ''
@@ -68,8 +68,23 @@ app.delete('/api/people/:id', (request, response, next) => {
     .catch(error => next(error))
 });
 
-app.put('/api/people/:id', function (req, res) {
-  res.send('Got a PUT request at /user')
+app.put('/api/people/:id', function (req, res, next) {
+  const body = req.body
+
+  const person = {
+    name: body.name,
+    parents: body.parents || [],
+    partners: body.partners || [],
+    children: body.children || [],
+    bio: body.bio || '',
+    url: body.url || ''
+  }
+
+  Person.findByIdAndUpdate(request.params.id, person, { new: true })
+    .then(updatedPerson => {
+      response.json(updatedPerson)
+    })
+    .catch(error => next(error))
 })
 
 const unknownEndpoint = (req, res) => {
